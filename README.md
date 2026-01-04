@@ -1,1 +1,76 @@
-# terraform-module-template
+# PostgreSQL Database and User Provisioning
+
+## Description
+
+This Terraform module creates a PostgreSQL database and user with appropriate privileges. It uses the PostgreSQL provider to manage database resources and stores credentials in AWS Secrets Manager.
+
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 1.3.0 |
+| aws | >= 4.0 |
+| postgresql | >= 1.26 |
+| random | >= 3.7 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| aws | >= 4.0 |
+| postgresql | >= 1.26 |
+| random | >= 3.7 |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| project | Project name | `string` | - | yes |
+| environment | Environment name | `string` | - | yes |
+| database_name | Name of the PostgreSQL database to create | `string` | - | yes |
+| database_user | Name of the PostgreSQL user/role to create | `string` | - | yes |
+| cluster_identifier | RDS cluster identifier to connect to | `string` | - | yes |
+| master_credentials_secret_name | Name of the Secrets Manager secret containing master database credentials (JSON with username and password) | `string` | - | yes |
+| credentials_secret_name | Name of the Secrets Manager secret to store the created user credentials | `string` | - | yes |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| database_name | Name of the created database |
+| database_user | Name of the created user/role |
+| credentials_secret_name | Name of the Secrets Manager secret storing user credentials |
+| credentials_secret_arn | ARN of the Secrets Manager secret storing user credentials |
+
+## Example Usage
+
+```hcl
+provider "postgresql" {
+  host            = data.aws_rds_cluster.aurora.endpoint
+  port            = 5432
+  database        = data.aws_rds_cluster.aurora.database_name
+  username        = local.master_credentials.username
+  password        = local.master_credentials.password
+  sslmode         = "require"
+  connect_timeout = 15
+}
+
+module "postgresql_app" {
+  source = "github.com/opstimus/terraform-postgresql?ref=v1.0.0"
+
+  project                        = "my_project"
+  environment                    = "stg"
+  database_name                  = "app_db"
+  database_user                  = "app_user"
+  cluster_identifier             = "my-project-stg-cluster"
+  master_credentials_secret_name = "my-project/stg/base/aurora/master_credentials"
+  credentials_secret_name        = "my-project/stg/base/app/db_credentials"
+}
+```
+
+## Notes
+
+- The module requires a configured PostgreSQL provider with access to the RDS cluster
+- Master credentials must be stored in Secrets Manager as JSON with `username` and `password` fields
+- The created user credentials are stored in Secrets Manager as JSON with `username` and `password` fields
+- The module grants ALL privileges on the database, schema, tables, and sequences to the created user
