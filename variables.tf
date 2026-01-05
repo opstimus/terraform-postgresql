@@ -28,8 +28,8 @@ variable "master_username" {
   description = "Master database username (used as owner for default privileges)"
 }
 
-variable "credentials_secret_name" {
+variable "user_credentials_secret_name" {
   type        = string
-  description = "Name of the Secrets Manager secret to store the created user credentials"
+  description = "Name of the Secrets Manager secret to store the created database user credentials"
 }
 

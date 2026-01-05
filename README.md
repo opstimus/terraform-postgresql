@@ -31,7 +31,7 @@ This Terraform module creates a PostgreSQL database and user with appropriate pr
 | database_user | Name of the PostgreSQL user/role to create | `string` | - | yes |
 | cluster_identifier | RDS cluster identifier to connect to | `string` | - | yes |
 | master_username | Master database username (used as owner for default privileges) | `string` | - | yes |
-| credentials_secret_name | Name of the Secrets Manager secret to store the created user credentials | `string` | - | yes |
+| user_credentials_secret_name | Name of the Secrets Manager secret to store the created database user credentials | `string` | - | yes |
 
 ## Outputs
 
@@ -39,8 +39,8 @@ This Terraform module creates a PostgreSQL database and user with appropriate pr
 |------|-------------|
 | database_name | Name of the created database |
 | database_user | Name of the created user/role |
-| credentials_secret_name | Name of the Secrets Manager secret storing user credentials |
-| credentials_secret_arn | ARN of the Secrets Manager secret storing user credentials |
+| user_credentials_secret_name | Name of the Secrets Manager secret storing the created database user credentials |
+| user_credentials_secret_arn | ARN of the Secrets Manager secret storing the created database user credentials |
 
 ## Example Usage
 
@@ -63,8 +63,8 @@ module "postgresql_app" {
   database_name          = "app_db"
   database_user          = "app_user"
   cluster_identifier     = "my-project-stg-cluster"
-  master_username        = "postgres"
-  credentials_secret_name = "my-project/stg/app/db_credentials"
+  master_username            = "postgres"
+  user_credentials_secret_name = "my-project/stg/app/db_credentials"
 }
 ```
 

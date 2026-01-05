@@ -8,13 +8,13 @@ output "database_user" {
   value       = postgresql_role.user.name
 }
 
-output "credentials_secret_name" {
-  description = "Name of the Secrets Manager secret storing user credentials"
+output "user_credentials_secret_name" {
+  description = "Name of the Secrets Manager secret storing the created database user credentials"
   value       = aws_secretsmanager_secret.user_credentials.name
 }
 
-output "credentials_secret_arn" {
-  description = "ARN of the Secrets Manager secret storing user credentials"
+output "user_credentials_secret_arn" {
+  description = "ARN of the Secrets Manager secret storing the created database user credentials"
   value       = aws_secretsmanager_secret.user_credentials.arn
 }
 
