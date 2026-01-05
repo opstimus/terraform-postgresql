@@ -1,16 +1,3 @@
-# Data source for master credentials
-data "aws_secretsmanager_secret" "master_credentials" {
-  name = var.master_credentials_secret_name
-}
-
-data "aws_secretsmanager_secret_version" "master_credentials" {
-  secret_id = data.aws_secretsmanager_secret.master_credentials.id
-}
-
-locals {
-  master_credentials = jsondecode(data.aws_secretsmanager_secret_version.master_credentials.secret_string)
-}
-
 # Data source for RDS cluster
 data "aws_rds_cluster" "main" {
   cluster_identifier = var.cluster_identifier
@@ -58,7 +45,7 @@ resource "postgresql_default_privileges" "tables" {
   database    = postgresql_database.database.name
   role        = postgresql_role.user.name
   schema      = "public"
-  owner       = local.master_credentials.username
+  owner       = var.master_username
   privileges  = ["ALL"]
   object_type = "table"
 }
@@ -68,7 +55,7 @@ resource "postgresql_default_privileges" "sequences" {
   database    = postgresql_database.database.name
   role        = postgresql_role.user.name
   schema      = "public"
-  owner       = local.master_credentials.username
+  owner       = var.master_username
   privileges  = ["ALL"]
   object_type = "sequence"
 }

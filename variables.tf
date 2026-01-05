@@ -23,9 +23,9 @@ variable "cluster_identifier" {
   description = "RDS cluster identifier to connect to"
 }
 
-variable "master_credentials_secret_name" {
+variable "master_username" {
   type        = string
-  description = "Name of the Secrets Manager secret containing master database credentials (JSON with username and password)"
+  description = "Master database username (used as owner for default privileges)"
 }
 
 variable "credentials_secret_name" {

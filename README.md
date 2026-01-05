@@ -30,7 +30,7 @@ This Terraform module creates a PostgreSQL database and user with appropriate pr
 | database_name | Name of the PostgreSQL database to create | `string` | - | yes |
 | database_user | Name of the PostgreSQL user/role to create | `string` | - | yes |
 | cluster_identifier | RDS cluster identifier to connect to | `string` | - | yes |
-| master_credentials_secret_name | Name of the Secrets Manager secret containing master database credentials (JSON with username and password) | `string` | - | yes |
+| master_username | Master database username (used as owner for default privileges) | `string` | - | yes |
 | credentials_secret_name | Name of the Secrets Manager secret to store the created user credentials | `string` | - | yes |
 
 ## Outputs
@@ -58,19 +58,19 @@ provider "postgresql" {
 module "postgresql_app" {
   source = "github.com/opstimus/terraform-postgresql?ref=v1.0.0"
 
-  project                        = "my_project"
-  environment                    = "stg"
-  database_name                  = "app_db"
-  database_user                  = "app_user"
-  cluster_identifier             = "my-project-stg-cluster"
-  master_credentials_secret_name = "my-project/stg/base/aurora/master_credentials"
-  credentials_secret_name        = "my-project/stg/base/app/db_credentials"
+  project                = "my_project"
+  environment            = "stg"
+  database_name          = "app_db"
+  database_user          = "app_user"
+  cluster_identifier     = "my-project-stg-cluster"
+  master_username        = "postgres"
+  credentials_secret_name = "my-project/stg/app/db_credentials"
 }
 ```
 
 ## Notes
 
 - The module requires a configured PostgreSQL provider with access to the RDS cluster
-- Master credentials must be stored in Secrets Manager as JSON with `username` and `password` fields
+- The master username is used as the owner for default privileges on tables and sequences
 - The created user credentials are stored in Secrets Manager as JSON with `username` and `password` fields
 - The module grants ALL privileges on the database, schema, tables, and sequences to the created user
