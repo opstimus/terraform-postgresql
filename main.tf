@@ -41,7 +41,7 @@ resource "postgresql_default_privileges" "tables" {
   role        = postgresql_role.user.name
   schema      = "public"
   owner       = var.master_username
-  privileges  = ["ALL"]
+  privileges  = ["DELETE", "INSERT", "MAINTAIN", "REFERENCES", "SELECT", "TRIGGER", "TRUNCATE", "UPDATE"]
   object_type = "table"
 }
 
@@ -51,7 +51,7 @@ resource "postgresql_default_privileges" "sequences" {
   role        = postgresql_role.user.name
   schema      = "public"
   owner       = var.master_username
-  privileges  = ["ALL"]
+  privileges  = ["SELECT", "UPDATE", "USAGE"]
   object_type = "sequence"
 }
 
