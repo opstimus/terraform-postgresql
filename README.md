@@ -25,11 +25,8 @@ This Terraform module creates a PostgreSQL database and user with appropriate pr
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| project | Project name | `string` | - | yes |
-| environment | Environment name | `string` | - | yes |
 | database_name | Name of the PostgreSQL database to create | `string` | - | yes |
 | database_user | Name of the PostgreSQL user/role to create | `string` | - | yes |
-| cluster_identifier | RDS cluster identifier to connect to | `string` | - | yes |
 | master_username | Master database username (used as owner for default privileges) | `string` | - | yes |
 | user_credentials_secret_name | Name of the Secrets Manager secret to store the created database user credentials | `string` | - | yes |
 
@@ -58,11 +55,8 @@ provider "postgresql" {
 module "postgresql_app" {
   source = "github.com/opstimus/terraform-postgresql?ref=v1.0.0"
 
-  project                = "my_project"
-  environment            = "stg"
   database_name          = "app_db"
   database_user          = "app_user"
-  cluster_identifier     = "my-project-stg-cluster"
   master_username            = "postgres"
   user_credentials_secret_name = "my-project/stg/app/db_credentials"
 }

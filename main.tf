@@ -1,8 +1,3 @@
-# Data source for RDS cluster
-data "aws_rds_cluster" "main" {
-  cluster_identifier = var.cluster_identifier
-}
-
 # Generate random password for database user
 resource "random_password" "user_password" {
   length           = 16
