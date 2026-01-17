@@ -65,6 +65,8 @@ resource "aws_secretsmanager_secret_version" "user_credentials" {
   secret_string = jsonencode({
     username = postgresql_role.user.name
     password = random_password.user_password.result
+    database = postgresql_database.database.name
+    host     = var.host
   })
 }
 
