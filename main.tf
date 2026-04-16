@@ -41,7 +41,7 @@ resource "postgresql_default_privileges" "tables" {
   role        = postgresql_role.user.name
   schema      = "public"
   owner       = var.master_username
-  privileges  = ["DELETE", "INSERT", "MAINTAIN", "REFERENCES", "SELECT", "TRIGGER", "TRUNCATE", "UPDATE"]
+  privileges  = ["DELETE", "INSERT", "REFERENCES", "SELECT", "TRIGGER", "TRUNCATE", "UPDATE"]
   object_type = "table"
 }
 
