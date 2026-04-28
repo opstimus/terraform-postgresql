@@ -41,6 +41,7 @@ resource "postgresql_default_privileges" "tables" {
   role        = postgresql_role.user.name
   schema      = "public"
   owner       = var.master_username
+  # TODO: Add "MAINTAIN" once supported — https://github.com/cyrilgdn/terraform-provider-postgresql/issues/573
   privileges  = ["DELETE", "INSERT", "REFERENCES", "SELECT", "TRIGGER", "TRUNCATE", "UPDATE"]
   object_type = "table"
 }
